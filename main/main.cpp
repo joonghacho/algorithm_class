@@ -60,7 +60,6 @@ int* insertionSort(int* arr, int n) {
 			}
 		}
 	}
-
     return sorted;
 }
 
@@ -102,7 +101,6 @@ void merge(int* sorted, int p, int q, int r) {
 		j++;
 		k++;
 	}
-	
 }
 
 void mergeSortRecursive(int* sorted, int l, int r) {
@@ -127,6 +125,83 @@ int* mergeSort(int* arr, int n) {
     return sorted;
 }
 
+int partitionRandomPivot(int* sorted, int low, int high) {
+	random_device device;
+	mt19937 generator(device());
+	uniform_int_distribution<int> distribution(low, high);
+	int randomInt = distribution(generator);
+	int pivot = sorted[randomInt];
+	int i = (low - 1);
+	
+	for (int j = low; j <= high; j++) {
+		printf("i : %d j : %d low : %d high : %d\n ", i,j,low,high);
+		if (j == randomInt){
+			continue;
+		}
+		if (sorted[j] <= pivot) {
+			i++;
+			if (i == randomInt){
+				randomInt++;
+			}
+			swap(sorted, i, j);
+		}
+	}
+	swap(sorted, i + 1, randomInt);
+	return (i + 1);
+}
+
+int* quickSortRandomPivotRecursive(int* sorted, int low, int high) {
+	if (low < high) {
+		int pivotPoint = partitionRandomPivot(sorted, low, high);
+		quickSortRandomPivotRecursive(sorted, low, pivotPoint - 1);
+		quickSortRandomPivotRecursive(sorted, pivotPoint + 1, high);
+	}
+}
+
+int* quickSortRandomPivot(int* arr, int n) {
+    int* sorted = new int[n];
+    for (size_t i = 0; i < n; i++) {
+        sorted[i] = arr[i];
+    }
+    // implement your algorithm
+    quickSortRandomPivotRecursive(sorted, 0, n-1);
+
+    return sorted;
+}
+
+int partitionLastPivot(int* sorted, int low, int high) {
+	int pivot = sorted[high];
+	int i = (low - 1);
+	
+	for (int j = low; j < high; j++) {
+		if (sorted[j] <= pivot) {
+			i++;
+			swap(sorted, i, j);
+		}
+	}
+	swap(sorted, i + 1, high);
+	return (i + 1);
+}
+
+int* quickSortLastPivotRecursive(int* sorted, int low, int high) {
+	if (low < high) {
+		int pivotPoint = partitionLastPivot(sorted, low, high);
+		quickSortLastPivotRecursive(sorted, low, pivotPoint - 1);
+		quickSortLastPivotRecursive(sorted, pivotPoint + 1, high);
+	}
+}
+
+int* quickSortLastPivot(int* arr, int n) {
+    int* sorted = new int[n];
+    for (size_t i = 0; i < n; i++) {
+        sorted[i] = arr[i];
+    }
+    // implement your algorithm
+    quickSortLastPivotRecursive(sorted, 0, n-1);
+
+    return sorted;
+}
+
 int main(void) {
     system_clock::time_point begin;
     double duration;
@@ -140,7 +215,7 @@ int main(void) {
     print_arr(arr, 10);
     delete[] arr;
 
-    n = 100;
+    n = 10;
     begin = system_clock::now();
     arr = gen_data(n);
     duration = duration_cast<milliseconds>(system_clock::now() - begin).count() / 1000.0;
@@ -149,7 +224,7 @@ int main(void) {
     begin = system_clock::now();
     int* sorted = insertionSort(arr, n);
     duration = duration_cast<milliseconds>(system_clock::now() - begin).count() / 1000.0;
-    cout << "Time for sort: " << duration << "s" << endl;
+    cout << "Time for insertion sort: " << duration << "s" << endl;
 
     is_sorted = check_sorted(sorted, n);
     cout << "Sorted(1: true, 0:false): " << check_sorted(sorted, n) << endl;
@@ -161,7 +236,7 @@ int main(void) {
     begin = system_clock::now();
     sorted = mergeSort(arr, n);
     duration = duration_cast<milliseconds>(system_clock::now() - begin).count() / 1000.0;
-    cout << "Time for sort: " << duration << "s" << endl;
+    cout << "Time for merge sort: " << duration << "s" << endl;
 
     is_sorted = check_sorted(sorted, n);
     cout << "Sorted(1: true, 0:false): " << check_sorted(sorted, n) << endl;
@@ -169,6 +244,35 @@ int main(void) {
         cout << "Try the implementation again" << endl;
     }
     delete[] sorted;
+    
+    begin = system_clock::now();
+    int *sorted = quickSortRandomPivot(arr, n);
+    duration = duration_cast<milliseconds>(system_clock::now() - begin).count() / 1000.0;
+    cout << "Time for randomized pivot quick sort: " << duration << "s" << endl;
+
+    is_sorted = check_sorted(sorted, n);
+    
+    for(int i=0;i<n;i++) printf("%d ", sorted[i]);
+    printf("\n");
+    
+    
+    cout << "Sorted(1: true, 0:false): " << check_sorted(sorted, n) << endl;
+    if (!is_sorted) {
+        cout << "Try the implementation again" << endl;
+    }
+    delete[] sorted;
+    
+//    begin = system_clock::now();
+//    sorted = quickSortLastPivot(arr, n);
+//    duration = duration_cast<milliseconds>(system_clock::now() - begin).count() / 1000.0;
+//    cout << "Time for last element pivot quick sort: " << duration << "s" << endl;
+//
+//    is_sorted = check_sorted(sorted, n);
+//    cout << "Sorted(1: true, 0:false): " << check_sorted(sorted, n) << endl;
+//    if (!is_sorted) {
+//        cout << "Try the implementation again" << endl;
+//    }
+//    delete[] sorted;
     
 
     delete[] arr;
