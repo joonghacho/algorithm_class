@@ -81,7 +81,7 @@ void merge(int* sorted, int p, int q, int r) {
 	j = 0;
 	k = p;
 	
-	while (i < n1 && j < n2){
+	while (i < n1 && j < n2) {
 		if (L[i] <= M[j]) {
 			sorted[k] = L[i];
 			i++;
@@ -91,12 +91,12 @@ void merge(int* sorted, int p, int q, int r) {
 		}
 		k++;
 	}
-	while (i < n1){
+	while (i < n1) {
 		sorted[k] = L[i];
 		i++;
 		k++;
 	}
-	while (j < n2){
+	while (j < n2) {
 		sorted[k] = M[j];
 		j++;
 		k++;
@@ -246,7 +246,7 @@ int main(void) {
     delete[] sorted;
     
     begin = system_clock::now();
-    int *sorted = quickSortRandomPivot(arr, n);
+    sorted = quickSortRandomPivot(arr, n);
     duration = duration_cast<milliseconds>(system_clock::now() - begin).count() / 1000.0;
     cout << "Time for randomized pivot quick sort: " << duration << "s" << endl;
 
@@ -262,17 +262,17 @@ int main(void) {
     }
     delete[] sorted;
     
-//    begin = system_clock::now();
-//    sorted = quickSortLastPivot(arr, n);
-//    duration = duration_cast<milliseconds>(system_clock::now() - begin).count() / 1000.0;
-//    cout << "Time for last element pivot quick sort: " << duration << "s" << endl;
-//
-//    is_sorted = check_sorted(sorted, n);
-//    cout << "Sorted(1: true, 0:false): " << check_sorted(sorted, n) << endl;
-//    if (!is_sorted) {
-//        cout << "Try the implementation again" << endl;
-//    }
-//    delete[] sorted;
+    begin = system_clock::now();
+    sorted = quickSortLastPivot(arr, n);
+    duration = duration_cast<milliseconds>(system_clock::now() - begin).count() / 1000.0;
+    cout << "Time for last element pivot quick sort: " << duration << "s" << endl;
+
+    is_sorted = check_sorted(sorted, n);
+    cout << "Sorted(1: true, 0:false): " << check_sorted(sorted, n) << endl;
+    if (!is_sorted) {
+        cout << "Try the implementation again" << endl;
+    }
+    delete[] sorted;
     
 
     delete[] arr;
